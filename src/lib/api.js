@@ -8,7 +8,7 @@ export async function api(path, opts = {}) {
   const token = getToken();
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  // Only stringify if body is an object and we're sending JSON
+  // Only stringify JSON bodies if they aren't already a string
   let body = opts.body;
   if (
     body != null &&
