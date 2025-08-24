@@ -1,0 +1,13 @@
+// src/lib/api.js
+export const API_BASE = import.meta.env.VITE_API_BASE || "http://127.0.0.1:8000";
+export const getToken = () => localStorage.getItem("token") || "";
+
+export async function api(path, opts = {}) {
+  const headers = { "Content-Type": "application/json", ...(opts.headers || {}) };
+  const token = getToken();
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const res = await fetch(`${API_BASE}${path}`, { ...opts, headers });
+  if (!res.ok) throw new Error(await res.text());
+  const ct = res.headers.get("content-type") || "";
+  return ct.includes("application/json") ? res.json() : res.text();
+}
